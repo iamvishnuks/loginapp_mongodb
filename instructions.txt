@@ -1,0 +1,13 @@
+Command for pulling and deploying mongodb on aws EC2
+
+sudo docker pull mongo
+sudo docker run --name mongo-container --restart=always -d -p 27017:27017 -v ~/data:/data/db mongo
+
+Command for building containers for webapp and lb and scaling
+
+sudo docker-compose build
+sudo docker-compose scale web=5
+sudo docker-compose up
+sudo docker-compose down
+
+
