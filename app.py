@@ -13,7 +13,7 @@ CORS(app)
 
 @app.route('/')
 def hello_world():
-    return 'Hi!'
+    return 'Hi from kolam app!'
 
 
 @app.route('/refresh/', methods=['POST'])
@@ -23,7 +23,10 @@ def get_refresh_response():
         abort(400)
     data = {}
     refresh_token = request.json['refresh_token']
-    data['response'] = decode_refresh_token(refresh_token)
+    d = decode_refresh_token(refresh_token)
+    data['Message'] = d['Message']
+    data['access_token'] = d['access_token']
+    data['status'] = d['status']
     return jsonify(data)
 
 

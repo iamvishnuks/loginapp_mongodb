@@ -56,6 +56,7 @@ def signup(data):
 
 def logout(token):
     user = decode_refresh_token(token)
+    print user
     user = user['sub']
     mysql = MySQLdb.connect("localhost", "root", "vishnuks", "refresh_tokens")
     cursor = mysql.cursor()
@@ -85,14 +86,17 @@ def decode_refresh_token(refresh_token):
         user = payload['sub']
         mysql = MySQLdb.connect("localhost", "root", "vishnuks", "refresh_tokens")
         cursor = mysql.cursor()
-        result = cursor.execute("select user from refresh_ids where user='" + user + "' and is_delete=1")
+        cursor.execute("select user from refresh_ids where user='" + user + "' and is_delete='1'")
+        c = cursor.fetchall()
+        print c
+        result = len(c)
         print result
         if result:
             return ({'Message': "You are already logged out. Please login again with your credentials to continue",
                      'response': 'False'})
         else:
             access_token = encode_auth_token(user)
-            return ({'Message': "Successful", "access_token": access_token, "status": 'True'})
+            return ({'Message': "Successful", "access_token": access_token, "status": 'True', 'sub': user})
     except jwt.ExpiredSignatureError:
         return ({'status': 'failed', 'msg': 'Signature expired. Please log in again.'})
     except jwt.InvalidTokenError:
